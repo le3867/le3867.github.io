@@ -1,455 +1,1016 @@
 <!DOCTYPE html>
-<html class="no-js" lang="en">
-
+<html lang="ko">
 <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>이상인의 포트폴리오</title>
-	<link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
-	<link rel="icon" href="favicon.ico" type="image/x-icon">
-    <link href="https://fonts.googleapis.com/css?family=Lato:300,400,700,900" rel="stylesheet">
-    <link rel="stylesheet" href="libs/font-awesome/css/font-awesome.min.css">
-    <link href="css/bootstrap.min.css" rel="stylesheet">
-    <link href="css/styles.css" rel="stylesheet">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>이상인 | Backend Developer</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&family=JetBrains+Mono:wght@400;600&family=Syne:wght@700;800&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #0a0a0f;
+      --bg2: #111118;
+      --bg3: #1a1a24;
+      --border: rgba(255,255,255,0.07);
+      --accent: #4f8eff;
+      --accent2: #7c3aed;
+      --text: #e8e8f0;
+      --text2: #9090a8;
+      --text3: #5a5a72;
+      --card: #13131c;
+      --tag-bg: rgba(79,142,255,0.1);
+      --tag-border: rgba(79,142,255,0.25);
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Noto Sans KR', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.7;
+      overflow-x: hidden;
+    }
+
+    /* 배경 그리드 */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(79,142,255,0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(79,142,255,0.03) 1px, transparent 1px);
+      background-size: 60px 60px;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* NAV */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 5%;
+      height: 64px;
+      background: rgba(10,10,15,0.85);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .nav-logo {
+      font-family: 'Syne', sans-serif;
+      font-weight: 800;
+      font-size: 1.2rem;
+      color: var(--text);
+      text-decoration: none;
+      letter-spacing: -0.02em;
+    }
+
+    .nav-logo span { color: var(--accent); }
+
+    .nav-links {
+      display: flex;
+      gap: 2rem;
+      list-style: none;
+    }
+
+    .nav-links a {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.78rem;
+      color: var(--text2);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+
+    .nav-links a:hover { color: var(--accent); }
+
+    /* SECTIONS */
+    section {
+      position: relative;
+      z-index: 1;
+      padding: 120px 5%;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    /* HERO */
+    #hero {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding-top: 64px;
+      max-width: 100%;
+      padding-left: 10%;
+      padding-right: 10%;
+    }
+
+    .hero-label {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.8rem;
+      color: var(--accent);
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      margin-bottom: 1.5rem;
+      opacity: 0;
+      animation: fadeUp 0.8s 0.2s forwards;
+    }
+
+    .hero-name {
+      font-family: 'Syne', sans-serif;
+      font-weight: 800;
+      font-size: clamp(3rem, 8vw, 7rem);
+      line-height: 1;
+      letter-spacing: -0.03em;
+      margin-bottom: 1rem;
+      opacity: 0;
+      animation: fadeUp 0.8s 0.4s forwards;
+    }
+
+    .hero-name .accent { color: var(--accent); }
+
+    .hero-role {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: clamp(1rem, 2.5vw, 1.4rem);
+      color: var(--text2);
+      margin-bottom: 2rem;
+      opacity: 0;
+      animation: fadeUp 0.8s 0.6s forwards;
+    }
+
+    .hero-desc {
+      font-size: 1.05rem;
+      color: var(--text2);
+      max-width: 540px;
+      line-height: 1.9;
+      margin-bottom: 3rem;
+      opacity: 0;
+      animation: fadeUp 0.8s 0.8s forwards;
+    }
+
+    .hero-stats {
+      display: flex;
+      gap: 3rem;
+      margin-bottom: 3rem;
+      opacity: 0;
+      animation: fadeUp 0.8s 1s forwards;
+    }
+
+    .stat-item { text-align: left; }
+
+    .stat-num {
+      font-family: 'Syne', sans-serif;
+      font-weight: 800;
+      font-size: 2.2rem;
+      color: var(--accent);
+      line-height: 1;
+    }
+
+    .stat-label {
+      font-size: 0.8rem;
+      color: var(--text3);
+      margin-top: 0.3rem;
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    .hero-cta {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+      opacity: 0;
+      animation: fadeUp 0.8s 1.2s forwards;
+    }
+
+    .btn-primary {
+      padding: 0.8rem 2rem;
+      background: var(--accent);
+      color: #fff;
+      border: none;
+      border-radius: 4px;
+      font-size: 0.9rem;
+      font-family: 'JetBrains Mono', monospace;
+      cursor: pointer;
+      text-decoration: none;
+      transition: all 0.2s;
+    }
+
+    .btn-primary:hover {
+      background: #6fa3ff;
+      transform: translateY(-2px);
+    }
+
+    .btn-secondary {
+      padding: 0.8rem 2rem;
+      background: transparent;
+      color: var(--text2);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      font-size: 0.9rem;
+      font-family: 'JetBrains Mono', monospace;
+      cursor: pointer;
+      text-decoration: none;
+      transition: all 0.2s;
+    }
+
+    .btn-secondary:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+      transform: translateY(-2px);
+    }
+
+    /* SECTION HEADER */
+    .section-header {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      margin-bottom: 3rem;
+    }
+
+    .section-label {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.75rem;
+      color: var(--accent);
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+    }
+
+    .section-title {
+      font-family: 'Syne', sans-serif;
+      font-weight: 800;
+      font-size: clamp(1.8rem, 4vw, 2.5rem);
+      letter-spacing: -0.02em;
+    }
+
+    .section-line {
+      flex: 1;
+      height: 1px;
+      background: var(--border);
+    }
+
+    /* ABOUT */
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+      align-items: start;
+    }
+
+    .about-text p {
+      color: var(--text2);
+      margin-bottom: 1.2rem;
+      font-size: 0.97rem;
+      line-height: 1.9;
+    }
+
+    .about-text p strong {
+      color: var(--text);
+      font-weight: 500;
+    }
+
+    .about-highlight {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-left: 3px solid var(--accent);
+      border-radius: 4px;
+      padding: 1.2rem 1.5rem;
+      margin-top: 1.5rem;
+      font-size: 0.92rem;
+      color: var(--text2);
+      font-style: italic;
+    }
+
+    .career-timeline { position: relative; }
+
+    .timeline-item {
+      position: relative;
+      padding-left: 1.8rem;
+      padding-bottom: 2rem;
+      border-left: 1px solid var(--border);
+    }
+
+    .timeline-item:last-child { padding-bottom: 0; border-left-color: transparent; }
+
+    .timeline-dot {
+      position: absolute;
+      left: -5px;
+      top: 6px;
+      width: 9px;
+      height: 9px;
+      border-radius: 50%;
+      background: var(--accent);
+    }
+
+    .timeline-period {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.72rem;
+      color: var(--accent);
+      margin-bottom: 0.3rem;
+    }
+
+    .timeline-company {
+      font-weight: 500;
+      font-size: 0.97rem;
+      margin-bottom: 0.2rem;
+    }
+
+    .timeline-role {
+      font-size: 0.82rem;
+      color: var(--text3);
+    }
+
+    /* SKILLS */
+    .skills-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .skill-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 1.8rem;
+      transition: border-color 0.2s, transform 0.2s;
+    }
+
+    .skill-card:hover {
+      border-color: rgba(79,142,255,0.3);
+      transform: translateY(-3px);
+    }
+
+    .skill-card-title {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.78rem;
+      color: var(--accent);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      margin-bottom: 1.2rem;
+    }
+
+    .skill-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+
+    .skill-tag {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.75rem;
+      padding: 0.3rem 0.8rem;
+      background: var(--tag-bg);
+      border: 1px solid var(--tag-border);
+      border-radius: 3px;
+      color: var(--accent);
+    }
+
+    .skill-tag.secondary {
+      background: rgba(124,58,237,0.08);
+      border-color: rgba(124,58,237,0.2);
+      color: #a78bfa;
+    }
+
+    .skill-tag.neutral {
+      background: rgba(255,255,255,0.04);
+      border-color: var(--border);
+      color: var(--text2);
+    }
+
+    /* PROJECTS */
+    .projects-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .project-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 1.8rem;
+      transition: border-color 0.2s, transform 0.2s;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .project-card:hover {
+      border-color: rgba(79,142,255,0.3);
+      transform: translateY(-3px);
+    }
+
+    .project-card.featured {
+      border-color: rgba(79,142,255,0.2);
+      background: linear-gradient(135deg, rgba(79,142,255,0.05), var(--card));
+      grid-column: span 2;
+    }
+
+    .project-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      margin-bottom: 0.8rem;
+      gap: 1rem;
+    }
+
+    .project-title {
+      font-family: 'Syne', sans-serif;
+      font-weight: 700;
+      font-size: 1.05rem;
+      line-height: 1.3;
+    }
+
+    .project-period {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.7rem;
+      color: var(--text3);
+      white-space: nowrap;
+      margin-top: 0.2rem;
+    }
+
+    .project-desc {
+      font-size: 0.88rem;
+      color: var(--text2);
+      line-height: 1.8;
+      margin-bottom: 1.2rem;
+      flex: 1;
+    }
+
+    .project-highlight {
+      font-size: 0.83rem;
+      color: var(--accent);
+      background: var(--tag-bg);
+      border: 1px solid var(--tag-border);
+      border-radius: 3px;
+      padding: 0.5rem 0.8rem;
+      margin-bottom: 1.2rem;
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    .project-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.4rem;
+      margin-top: auto;
+    }
+
+    .project-tag {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.68rem;
+      padding: 0.2rem 0.6rem;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid var(--border);
+      border-radius: 2px;
+      color: var(--text3);
+    }
+
+    .project-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.73rem;
+      color: var(--accent);
+      text-decoration: none;
+      margin-top: 1rem;
+      transition: gap 0.2s;
+    }
+
+    .project-link:hover { gap: 0.7rem; }
+
+    /* CONTACT */
+    .contact-box {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 4rem;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .contact-box::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 400px;
+      height: 400px;
+      background: radial-gradient(circle, rgba(79,142,255,0.08) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .contact-title {
+      font-family: 'Syne', sans-serif;
+      font-weight: 800;
+      font-size: clamp(1.5rem, 4vw, 2.5rem);
+      letter-spacing: -0.02em;
+      margin-bottom: 1rem;
+    }
+
+    .contact-desc {
+      color: var(--text2);
+      font-size: 0.97rem;
+      margin-bottom: 2.5rem;
+    }
+
+    .contact-links {
+      display: flex;
+      justify-content: center;
+      gap: 1.5rem;
+      flex-wrap: wrap;
+    }
+
+    .contact-link {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      padding: 0.8rem 1.6rem;
+      background: var(--bg3);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      color: var(--text2);
+      text-decoration: none;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.82rem;
+      transition: all 0.2s;
+    }
+
+    .contact-link:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+      transform: translateY(-2px);
+    }
+
+    /* FOOTER */
+    footer {
+      text-align: center;
+      padding: 2rem;
+      border-top: 1px solid var(--border);
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.73rem;
+      color: var(--text3);
+      position: relative;
+      z-index: 1;
+    }
+
+    /* ANIMATIONS */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(24px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .fade-in {
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.7s ease, transform 0.7s ease;
+    }
+
+    .fade-in.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* SCROLLBAR */
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: var(--bg); }
+    ::-webkit-scrollbar-thumb { background: var(--bg3); border-radius: 3px; }
+
+    /* RESPONSIVE */
+    @media (max-width: 768px) {
+      nav { padding: 0 4%; }
+      .nav-links { gap: 1rem; }
+      .nav-links a { font-size: 0.72rem; }
+      #hero { padding-left: 5%; padding-right: 5%; }
+      .hero-stats { gap: 1.5rem; flex-wrap: wrap; }
+      .about-grid { grid-template-columns: 1fr; gap: 2.5rem; }
+      .project-card.featured { grid-column: span 1; }
+      .contact-box { padding: 2.5rem 1.5rem; }
+      section { padding: 80px 5%; }
+    }
+  </style>
 </head>
-
 <body>
-    <div id="mobile-menu-open" class="shadow-large">
-        <i class="fa fa-bars" aria-hidden="true"></i>
+
+<!-- NAV -->
+<nav>
+  <a href="#hero" class="nav-logo">LEE<span>.</span>SANGIN</a>
+  <ul class="nav-links">
+    <li><a href="#about">about</a></li>
+    <li><a href="#skills">skills</a></li>
+    <li><a href="#projects">projects</a></li>
+    <li><a href="#contact">contact</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <p class="hero-label">// Backend Developer</p>
+  <h1 class="hero-name">이상인<span class="accent">.</span></h1>
+  <p class="hero-role">Java / Spring Boot · GCP · Redis · MSA</p>
+  <p class="hero-desc">
+    조선소·요식업을 거쳐 개발자의 길을 택했습니다.<br>
+    어떤 환경에서도 끝까지 해내는 습관으로,<br>
+    4년간 14개 이상의 프로젝트를 완수했습니다.
+  </p>
+  <div class="hero-stats">
+    <div class="stat-item">
+      <div class="stat-num">4+</div>
+      <div class="stat-label">years_exp</div>
     </div>
-    <!-- End #mobile-menu-toggle -->
-    <header>
-        <div id="mobile-menu-close">
-            <span>Close</span> <i class="fa fa-times" aria-hidden="true"></i>
-        </div>
-        <ul id="menu" class="shadow">
-            <li>
-                <a href="#about">About</a>
-            </li>
-            <li>
-                <a href="#education">Education</a>
-            </li>
-            <li>
-                <a href="#projects">Projects</a>
-            </li>
-            <li>
-                <a href="#skills">Skills</a>
-            </li>
-            <li>
-                <a href="#contact">Contact</a>
-            </li>
-        </ul>
-    </header>
-    <!-- End header -->
-
-    <div id="lead" style="background: url(images/programing.jpg); background-size: cover;">
-        <div id="lead-content">
-            <h1>이상인의 포트폴리오</h1>
-        </div>
-        <!-- End #lead-content -->
-
-        <div id="lead-overlay"></div>
-
-        <div id="lead-down">
-            <span>
-                <i class="fa fa-chevron-down" aria-hidden="true"></i>
-            </span>
-        </div>
-        <!-- End #lead-down -->
+    <div class="stat-item">
+      <div class="stat-num">14+</div>
+      <div class="stat-label">projects</div>
     </div>
-    <!-- End #lead -->
-
-    <div id="about">
-        <div class="container">
-            <div class="row">
-                <div class="col-md-4">
-                    <h2 class="heading">About Me</h2>
-                </div>
-                <div class="col-md-8">
-                    <p>
-                        안녕하십니까 저는 이상인입니다. 저는 현재 개발회사에서 3년여를 근무하고 이직을 준비중입니다.<br>
-                        저는 울산의 KH정보교육원을 2021년10월에 수료하고 이룸컴퍼니에서 6개월,<br> 퀀텀에듀솔루션에서 2년7개월을 근무했습니다.
-                        이룸컴퍼니에서는 카페더왈츠라는 애견카페 홈페이지와 DSC리빙랩이라는 홈페이지를 개발,유지보수 하였고<br>
-                        퀀텀에듀솔루션에서는 생명윤리정책원 개발 및 유지보수, 화학시험연구원 고도화작업, 블럭체인API개발,<br> 국가민방위교육원 고도화 개발
-                        , 대한민국 대통령실 교육관리시스템 솔루션 납품 및 마이그레이션, 글로벌클래스 솔루션 개발 및 유지보수, 신용회복위원회 유지보수 등을 하였습니다.
-                        비록 경력이 많다고 할순 없지만 맡은 일은 누구보다 열심히 수행하였고 또한 업무를 잘 수행하기 위해서 자기개발도 열심히 하였습니다.<br>
-                        저는 앞으로도 열심히 할 준비가 되어있고 또한 많은것을 공부하고 싶습니다. 잘부탁드립니다.<br>
-                    </p><br>
-                        <a href="images/이상인의 자기소개서.pdf">이력서 및 자기소개서 보기</a>
-                </div>
-            </div>
-        </div>
+    <div class="stat-item">
+      <div class="stat-num">+80%</div>
+      <div class="stat-label">signup_rate</div>
     </div>
-    <!-- End #about -->
+  </div>
+  <div class="hero-cta">
+    <a href="#projects" class="btn-primary">프로젝트 보기 →</a>
+    <a href="#contact" class="btn-secondary">연락하기</a>
+  </div>
+</section>
 
-    
- 
-    <div id="education">
-        <h2 class="heading">Education</h2>
-        <div class="education-block">
-            <h3>울산 KH정보교육원</h3>
-            <span class="education-date">2021년 4월 23일 - 2021년 10월 10일</span>
-            <h4>(스마트웹&콘텐츠개발)프로젝트 중심의 자바(JAVA)&안드로이드 개발자 과정</h4>
-            <p>
-               웹프로그래밍에 필요한 전반적인 프로그래밍의 기초를 배움 (java11,SQL,HTML,CSS,ES6등등)
-            </p>
-        </div>
-        <!-- End .education-block -->
-
-        <div id="education">
-            <h2 class="heading">Work</h2>
-            <div class="education-block">
-                <h3>이룸컴퍼니</h3>
-                <span class="education-date">2021년 12월 1일 - 2022년 6월 1일</span>
-                <h4></h4>
-                <p>
-                   더왈츠홈페이지,DSC리빙랩홈페이지 백엔드작업 참여
-                </p>
-            </div>
-            <div class="education-block">
-                <h3>퀀텀에듀솔루션</h3>
-                <span class="education-date">2022년 6월 14일 - 2024년 12월 31일</span>
-                <h4></h4>
-                <p>
-                    생명윤리정책원 개발 및 유지보수, 화학시험연구원 고도화작업, 블럭체인API개발, 국가민방위교육원 고도화 개발
-                    , 대한민국 대통령실 교육관리시스템 솔루션 납품 및 마이그레이션, 글로벌클래스 솔루션 개발 및 유지보수 등
-                </p>
-            </div>
-
-    <!-- End #education -->
-
-    <div id="projects" class="background-alt">
-        <h2 class="heading">Projects</h2>
-        <div class="container">
-            <div class="row">
-                <div class="project shadow-large">
-                    <div class="project-image">
-                        <img src="./images/ollehMain.png" />
-                    </div>
-                    <!-- End .project-image -->
-                    <div class="project-info">
-                        <h3>농어촌Olleh</h3>
-                        <p>
-                            코로나로 인한 해외여행이 감소하고,국내여행의 관심도가 증가함에따라 농어촌체험마을에대한 인기가 높아지고있습니다. 그래서 농어촌체험마을여행에대한 정보제공의 편의성을 제공하기위하여 이 프로젝트를 기획하게됬습니다.
-                        </p>
-                        <a href="https://github.com/le3867/olleh">작성코드</a><br>
-                        <a href="https://youtu.be/fg_CZwwGLI4">프로젝트 실행 동영상</a><br>
-                        <a href="images/최종ppt.pdf">프로젝트 개요 PPT</a>
-                    </div>
-                    <!-- End .project-info -->
-                </div>
-                <!-- End .project -->
-                <!-- End .project -->
-            </div>
-        </div>
-
-        <div class="container">
-            <div class="row">
-                <div class="project shadow-large">
-                    <div class="project-image">
-                        <img src="./images/왈츠메인페이지1.png" />
-                    </div>
-                    <!-- End .project-image -->
-                    <div class="project-info">
-                        <h3 style="text-align: center">카페더왈츠</h3>
-                        <p>
-                           더 왈츠는 애견카페,애견스파,펫미용샵등을 운영하고있으며 항상 보호자와 애완견의 만족을 생각하며 발전해 나아갑니다.
-                        </p>
-                        <a href="http://walznjoypia.com/">카페더왈츠홈페이지</a><br>
-                        <a href="images/더왈츠.pdf">프로젝트 PPT</a>
-                    </div>
-                    <!-- End .project-info -->
-                </div>
-                <!-- End .project -->
-                <!-- End .project -->
-            </div>
-        </div>
-        
-        <div class="container">
-            <div class="row">
-                <div class="project shadow-large">
-                    <div class="project-image">
-                        <img src="./images/메인페이지1.png" />
-                    </div>
-                    <!-- End .project-image -->
-                    <div class="project-info">
-                        <h3 style="text-align: center">DSC리빙랩</h3>
-                        <p>
-                           미래리빙랩은 '지역문제 해결을 위해 지역민을 중심으로 지자체,기업,대학이 함께 참여해 실제 현장에서 해결책을 찾는 상향식 문제해결방법'입니다. 저희 미래리빙랩센터는 대전,세종,충남지역의 현안 과제를 모빌리티 기술을 활용해 지역거주자 중심의 해결방안을 위한 프로그램을 개발하고 운영하고있습니다.
-                        </p>
-                        <a href="http://dsclivinglab.or.kr/">DSC리빙랩홈페이지</a><br>
-                        <a href="images/DSC 관리자페이지 매뉴얼.pdf">프로젝트 PPT</a>
-                    </div>
-                    <!-- End .project-info -->
-                </div>
-                <!-- End .project -->
-                <!-- End .project -->
-            </div>
-        </div>
-
-        <div class="container">
-            <div class="row">
-                <div class="project shadow-large">
-                    <div class="project-image" style="width:300px;height: 200px;">
-                        <img style="width: 100%;height: 100%;" src="./images/생명윤리.PNG" />
-                    </div>
-                    <!-- End .project-image -->
-                    <div class="project-info">
-                        <h3 style="text-align: center">생명윤리정책원</h3>
-                        <p>
-                           DTC(direct-to-consumer. 소비자 대상 직접) 유전자검사는 의료기관을 방문하지 않고 소비자가 직접 유전자검사를 의뢰할 수 있는 검사입니다
-                        </p>
-                        <a href="http://dtc.qtedu.kr/">생명윤리정책원 홈페이지</a><br>
-                        <a href="images/dtcPDF.pdf">프로젝트 PPT</a><br>
-                        <span>맡은역활 : 퍼블리싱을 제외한 사용자,관리자 페이지 개발</span>
-                    </div>
-                    <!-- End .project-info -->
-                </div>
-                <!-- End .project -->
-            </div>
-        </div>
-
-        <div class="container">
-            <div class="row">
-                <div class="project shadow-large">
-                    <div class="project-image" style="width:300px;height: 200px;">
-                        <img style="width: 100%;height: 100%;" src="./images/화시연.PNG" />
-                    </div>
-                    <!-- End .project-image -->
-                    <div class="project-info">
-                        <h3 style="text-align: center">한국화학융합시험연구원 - 해외규격인증획득지원센터</h3>
-                        <p>
-                            해외규격인증획득지원을 위한 교육사이트
-                        </p>
-                        <a href="https://www.smes.go.kr/globalcerti/main.do">한국화학융합시험연구원 홈페이지</a><br>
-                        <span>맡은역활 : 교육신청,설문지,ZOOM API연동,다시보기 사용자 및 관리자 개발</span>
-                    </div>
-                    <!-- End .project-info -->
-                </div>
-                <!-- End .project -->
-            </div>
-        </div>
-
-        <div class="container">
-            <div class="row">
-                <div class="project shadow-large">
-                    <div class="project-image" style="width:300px;height: 200px;">
-                        <img style="width: 100%;height: 100%;" src="./images/노트북.jpg" />
-                    </div>
-                    <!-- End .project-image -->
-                    <div class="project-info" style="width:70%;">
-                        <h3 style="text-align: center">블럭체인 API</h3>
-                        <p>
-                            HeraJ를 이용한 블럭체인 API 개발
-                        </p>
-                        <span>맡은역활 : HeraJ를 이용해서 지갑생성 , 송금, 조회 기능개발</span>
-                    </div>
-                    <!-- End .project-info -->
-                </div>
-                <!-- End .project -->
-            </div>
-        </div>
-
-        <div class="container">
-            <div class="row">
-                <div class="project shadow-large">
-                    <div class="project-image" style="width:300px;height: 200px;">
-                        <img style="width: 100%;height: 100%;" src="./images/민방위.PNG" />
-                    </div>
-                    <!-- End .project-image -->
-                    <div class="project-info">
-                        <h3 style="text-align: center">국가민방위교육원 고도화 개발</h3>
-                        <p>
-                            국가민방위재난안전교육원 교육관리시스템 고도화 개발
-                        </p>
-                        <a href="https://edu.ndti.go.kr/">국가민방위재난안전교육원 홈페이지</a><br>
-                        <span>맡은역활 : ZOOM API 연동, GOOROOMEE API 연동, 생활관 신청 및 예약 관리, 출석정보관리 개발</span>
-                    </div>
-                    <!-- End .project-info -->
-                </div>
-                <!-- End .project -->
-            </div>
-        </div>
-
-        <div class="container">
-            <div class="row">
-                <div class="project shadow-large">
-                    <div class="project-image" style="width:300px;height: 200px;">
-                        <img style="width: 100%;height: 100%;" src="./images/노트북.jpg" />
-                    </div>
-                    <!-- End .project-image -->
-                    <div class="project-info">
-                        <h3 style="text-align: center">대한민국 대통령실 교육관리시스템 솔루션 납품 및 마이그레이션</h3>
-                        <p>
-                            대한민국 대통령실 교육관리시스템 솔루션 납품 및 마이그레이션
-                        </p>
-                        <span>맡은역활 : 교육관리시스템 사용자 및 관리자 마이그레이션</span>
-                    </div>
-                    <!-- End .project-info -->
-                </div>
-                <!-- End .project -->
-            </div>
-        </div>
-
-        <div class="container">
-            <div class="row">
-                <div class="project shadow-large">
-                    <div class="project-image" style="width:300px;height: 200px;">
-                        <img style="width: 100%;height: 100%;" src="./images/글로벌클래스.PNG" />
-                    </div>
-                    <!-- End .project-image -->
-                    <div class="project-info" style="width:70%;">
-                        <h3 style="text-align: center">글로벌클래스 솔루션 개발</h3>
-                        <p>
-                            채팅기능,번역기능을 이용한 강의 프로그램
-                        </p>
-                        <a href="https://global-class.kr/">글로벌클래스 홈페이지</a><br>
-                        <a href="images/globalClassPDF.pdf">프로젝트 PPT</a><br>
-                        <span>맡은역활 : 퍼블리싱을 제외한 사용자,관리자 페이지 개발</span>
-                    </div>
-                    <!-- End .project-info -->
-                </div>
-                <!-- End .project -->
-            </div>
-        </div>
-
-        <div class="container">
-            <div class="row">
-                <div class="project shadow-large">
-                    <div class="project-image" style="width:300px;height: 200px;">
-                        <img style="width: 100%;height: 100%;" src="./images/신복위.png" />
-                    </div>
-                    <!-- End .project-image -->
-                    <div class="project-info" style="width:70%;">
-                        <h3 style="text-align: center">신용회복위원회 유지보수</h3>
-                        <p>
-                            신용회복위원회의 교육시스템
-                        </p>
-                        <a href="https://www.educredit.or.kr/">신용회복위원회 홈페이지</a><br>
-                        <a href="images/ccrsPDF.pdf">프로젝트 PPT</a><br>
-                        <span>맡은역활 : 회원 및 교육관리등에 대한 전반적인 유지보수 및 개발 담당</span>
-                    </div>
-                    <!-- End .project-info -->
-                </div>
-                <!-- End .project -->
-            </div>
-        </div>
-
-        <div class="container">
-            <div class="row">
-                <div class="project shadow-large">
-                    <div class="project-image" style="width:300px;height: 200px;">
-                        <img style="width: 100%;height: 100%;" src="./images/노트북.jpg" />
-                    </div>
-                    <!-- End .project-image -->
-                    <div class="project-info" style="width:70%;">
-                        <h3 style="text-align: center">NHN 차세대 신규 교육시스템 개발 1차 사업</h3>
-                        <p>
-                            신규 LMS
-                        </p>
-                        <span>맡은역활 : 회원관리, 교육관리, 사용자 교육영상시청시<br>진도율체크하여 수료처리등을 개발</span>
-                    </div>
-                    <!-- End .project-info -->
-                </div>
-                <!-- End .project -->
-            </div>
-        </div>
-
-        <div class="container">
-            <div class="row">
-                <div class="project shadow-large">
-                    <div class="project-image" style="width:300px;height: 200px;">
-                        <img style="width: 100%;height: 100%;" src="./images/노트북.jpg" />
-                    </div>
-                    <!-- End .project-image -->
-                    <div class="project-info" style="width:70%;">
-                        <h3 style="text-align: center">자사 경영시뮬레이션시스템(cxinno) 개발</h3>
-                        <p>
-                            경영시뮬레이션 시행 및 PDF파일로 최종 취합하여 다운로드할수있는 시스템
-                        </p>
-                        <span>맡은역활 : 퍼빌리싱 적용, 시뮬레이션 제출기능 및 PDF파일로 종합하여 <br> 다운로드하는 기능 개발,ChatGPT를 이용한 챗봇기능 개발</span>
-                    </div>
-                    <!-- End .project-info -->
-                </div>
-                <!-- End .project -->
-            </div>
-        </div>
+<!-- ABOUT -->
+<section id="about">
+  <div class="section-header fade-in">
+    <span class="section-label">01</span>
+    <h2 class="section-title">About Me</h2>
+    <div class="section-line"></div>
+  </div>
+  <div class="about-grid">
+    <div class="about-text fade-in">
+      <p>
+        저는 <strong>끝까지 해내는 사람</strong>입니다. 조선소에서 용접공으로, 식당에서 점장으로, 그리고 지금은 백엔드 개발자로 일해왔습니다. 직업은 달랐지만 공통점은 하나, 어떤 환경에서도 포기하지 않고 결과를 만들어냈다는 것입니다.
+      </p>
+      <p>
+        조선소에서는 입사 <strong>1년 6개월 만에 작업 조장</strong>을 맡았고, 식당에서는 <strong>1년 만에 점장</strong> 제안을 받았습니다. 빠른 성과의 비결은 재능이 아니라, 모르는 건 익힐 때까지 붙잡는 습관이었습니다.
+      </p>
+      <p>
+        개발자로 전환한 이후 약 4년간 공공기관, 금융권, 대기업 등 다양한 도메인에서 14개 이상의 프로젝트를 완수했습니다. 앞으로는 <strong>대용량 트래픽 처리</strong>에 강한 백엔드 아키텍처 전문가로 성장하는 것이 목표입니다.
+      </p>
+      <div class="about-highlight">
+        "나를 죽이지 못한 고통은 나를 더욱 강하게 만든다" — 니체
+      </div>
     </div>
-    <!-- End #projects -->
-
-    <div id="skills">
-        <h2 class="heading">Skills</h2>
-        <ul>
-            <li>JavaScript</li>
-            <li>Node.js</li>
-            <li>Java</li>
-            <li>JavaScript</li>
-           <li>JAVA11</li>
-           <li>SQL,PL/SQL</li>
-           <li>HTML</li>
-           <li>CSS</li>
-           <li>Thymeleaf</li>
-           <li>SprinFramework(Spring MVC,Spring JDBC)</li>
-           <li>Gradle</li>
-           <li>JunitFramework5</li>
-           <li>JSON</li>
-           <li>XML</li>
-           <li>Kakao 지도API</li>
-           <li>AJAX</li>
-        </ul>
+    <div class="career-timeline fade-in">
+      <div class="timeline-item">
+        <div class="timeline-dot"></div>
+        <div class="timeline-period">2025.01 ~ 현재</div>
+        <div class="timeline-company">현 재직 중</div>
+        <div class="timeline-role">Backend Developer · Java / Spring Boot / GCP</div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-dot"></div>
+        <div class="timeline-period">2022.06 ~ 2024.12</div>
+        <div class="timeline-company">퀀텀에듀솔루션</div>
+        <div class="timeline-role">Backend Developer · 대통령실·NHN·신용회복위원회 등</div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-dot"></div>
+        <div class="timeline-period">2021.12 ~ 2022.06</div>
+        <div class="timeline-company">이룸컴퍼니 (제이솔루션)</div>
+        <div class="timeline-role">Backend Developer · Java / MariaDB</div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-dot"></div>
+        <div class="timeline-period">2021.04 ~ 2021.10</div>
+        <div class="timeline-company">KH정보교육원 수료</div>
+        <div class="timeline-role">Java & Android 개발자 과정</div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-dot"></div>
+        <div class="timeline-period">~ 2021</div>
+        <div class="timeline-company">조선소 · 요식업</div>
+        <div class="timeline-role">조선소 작업 조장 · 식당 점장</div>
+      </div>
     </div>
-    <!-- End #skills -->
+  </div>
+</section>
 
-    <div id="contact">
-        <h2>Contect</h2>
-        <h3>Email : le3867@daum.net</h3>
-        <!-- End #contact-form -->
+<!-- SKILLS -->
+<section id="skills">
+  <div class="section-header fade-in">
+    <span class="section-label">02</span>
+    <h2 class="section-title">Skills</h2>
+    <div class="section-line"></div>
+  </div>
+  <div class="skills-grid">
+    <div class="skill-card fade-in">
+      <div class="skill-card-title">// Backend</div>
+      <div class="skill-tags">
+        <span class="skill-tag">Java</span>
+        <span class="skill-tag">Spring Boot</span>
+        <span class="skill-tag">Spring MVC</span>
+        <span class="skill-tag">Spring JDBC</span>
+        <span class="skill-tag">MSA</span>
+        <span class="skill-tag">REST API</span>
+      </div>
     </div>
-    <!-- End #contact -->
+    <div class="skill-card fade-in">
+      <div class="skill-card-title">// Frontend</div>
+      <div class="skill-tags">
+        <span class="skill-tag secondary">Vue.js</span>
+        <span class="skill-tag secondary">JSP</span>
+        <span class="skill-tag secondary">Thymeleaf</span>
+        <span class="skill-tag secondary">HTML/CSS</span>
+        <span class="skill-tag secondary">JavaScript</span>
+      </div>
+    </div>
+    <div class="skill-card fade-in">
+      <div class="skill-card-title">// Database</div>
+      <div class="skill-tags">
+        <span class="skill-tag">MariaDB</span>
+        <span class="skill-tag">Oracle</span>
+        <span class="skill-tag">PostgreSQL</span>
+        <span class="skill-tag">MySQL</span>
+        <span class="skill-tag">Redis</span>
+      </div>
+    </div>
+    <div class="skill-card fade-in">
+      <div class="skill-card-title">// Infra & Cloud</div>
+      <div class="skill-tags">
+        <span class="skill-tag secondary">GCP</span>
+        <span class="skill-tag secondary">Linux</span>
+        <span class="skill-tag secondary">Windows Server</span>
+        <span class="skill-tag secondary">Git</span>
+      </div>
+    </div>
+    <div class="skill-card fade-in">
+      <div class="skill-card-title">// External API</div>
+      <div class="skill-tags">
+        <span class="skill-tag neutral">ZOOM API</span>
+        <span class="skill-tag neutral">GOOROOMEE API</span>
+        <span class="skill-tag neutral">ChatGPT API</span>
+        <span class="skill-tag neutral">HeraJ 블록체인</span>
+        <span class="skill-tag neutral">네이버지도 API</span>
+      </div>
+    </div>
+    <div class="skill-card fade-in">
+      <div class="skill-card-title">// AI Tools</div>
+      <div class="skill-tags">
+        <span class="skill-tag">Claude Code</span>
+        <span class="skill-tag">Vibe Coding</span>
+        <span class="skill-tag neutral">ChatGPT</span>
+      </div>
+    </div>
+  </div>
+</section>
 
-    <footer>
-        <div class="container">
-            <div class="row">
-                <div class="col-sm-5 copyright">
-                    <p>
-                        Copyright &copy; 2021 le3867
-                    </p>
-                </div>
-                <div class="col-sm-2 top">
-                    <span id="to-top">
-                        <i class="fa fa-chevron-up" aria-hidden="true"></i>
-                    </span>
-                </div>
-                <div class="col-sm-5 social">
-                    <ul>
-                        <li>
-                            <a href="https://github.com/" target="_blank"><i class="fa fa-github" aria-hidden="true"></i></a>
-                        </li>
-                        <li>
-                            <a href="https://stackoverflow.com/" target="_blank"><i class="fa fa-stack-overflow" aria-hidden="true"></i></a>
-                        </li>
-                        <li>
-                            <a href="https://linkedin.com/" target="_blank"><i class="fa fa-linkedin" aria-hidden="true"></i></a>
-                        </li>
-                        <li>
-                            <a href="https://www.facebook.com/" target="_blank"><i class="fa fa-facebook" aria-hidden="true"></i></a>
-                        </li>
-                        <li>
-                            <a href="https://twitter.com/" target="_blank"><i class="fa fa-twitter" aria-hidden="true"></i></a>
-                        </li>
-                        <li>
-                            <a href="https://plus.google.com/" target="_blank"><i class="fa fa-google-plus" aria-hidden="true"></i></a>
-                        </li>
-                    </ul>
-                </div>
-            </div>
+<!-- PROJECTS -->
+<section id="projects">
+  <div class="section-header fade-in">
+    <span class="section-label">03</span>
+    <h2 class="section-title">Projects</h2>
+    <div class="section-line"></div>
+  </div>
+  <div class="projects-grid">
+
+    <!-- Featured: 마인드케어 -->
+    <div class="project-card featured fade-in">
+      <div class="project-header">
+        <div>
+          <div class="project-title">통신사 부가서비스 마인드케어 프리미엄</div>
+          <div class="project-period">2025.04 ~ 2025.09</div>
         </div>
-    </footer>
-    <!-- End footer -->
+      </div>
+      <p class="project-desc">
+        통신사 부가서비스 마인드케어의 프리미엄 기능을 신규 개발. 상담사-사용자 간 1:1 실시간 채팅 상담 기능과 AI 마음일기 답변 기능을 구현했습니다. 채팅 서버 구축 시 WebSocket으로 시작했으나, 서버 이중화 환경에서 메시지가 전달되지 않는 구조적 문제를 발견하고 Kafka와 Redis Pub/Sub을 비교 검토하여 실시간 채팅 특성에 맞는 Redis Pub/Sub을 선택해 해결했습니다.
+      </p>
+      <div class="project-highlight">→ WebSocket → Redis Pub/Sub 전환으로 서버 이중화 문제 해결</div>
+      <div class="project-tags">
+        <span class="project-tag">Java</span>
+        <span class="project-tag">Vue.js</span>
+        <span class="project-tag">Redis Pub/Sub</span>
+        <span class="project-tag">WebSocket</span>
+        <span class="project-tag">GCP</span>
+        <span class="project-tag">MySQL</span>
+        <span class="project-tag">AI 연동</span>
+      </div>
+    </div>
 
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
-    <script src="js/scripts.min.js"></script>
+    <!-- Featured: 마인드케어 가입률 -->
+    <div class="project-card featured fade-in">
+      <div class="project-header">
+        <div>
+          <div class="project-title">통신사 부가서비스 마인드케어 — 가입률 개선</div>
+          <div class="project-period">2025.02 ~ 현재</div>
+        </div>
+      </div>
+      <p class="project-desc">
+        서비스 가입률 향상을 위해 화면 진입 즉시 키패드가 자동으로 노출되도록 기획했으나, 앱 정책상 네이티브 키보드 강제 호출이 불가능한 제약이 있었습니다. 이를 해결하기 위해 커스텀 키보드 패드를 직접 설계하고 개발했으며, Claude Code를 활용해 디자인부터 퍼블리싱, 기능 구현까지 빠르게 완성했습니다.
+      </p>
+      <div class="project-highlight">→ 번호 입력률 60% → 80% · 가입률 8~10% → 14~16% 개선</div>
+      <div class="project-tags">
+        <span class="project-tag">Java</span>
+        <span class="project-tag">Vue.js</span>
+        <span class="project-tag">커스텀 UI</span>
+        <span class="project-tag">GCP</span>
+        <span class="project-tag">Claude Code</span>
+      </div>
+    </div>
+
+    <!-- NHN -->
+    <div class="project-card fade-in">
+      <div class="project-header">
+        <div>
+          <div class="project-title">NHN 차세대 교육시스템 개발 1차</div>
+          <div class="project-period">2023.09 ~ 2023.12</div>
+        </div>
+      </div>
+      <p class="project-desc">회원관리, 교육관리, 영상 시청 진도율 체크 및 수료 처리 기능 개발. MSA 구성 환경에서 진행.</p>
+      <div class="project-tags">
+        <span class="project-tag">Java</span>
+        <span class="project-tag">Spring Boot</span>
+        <span class="project-tag">MSA</span>
+        <span class="project-tag">MariaDB</span>
+      </div>
+    </div>
+
+    <!-- 대통령실 -->
+    <div class="project-card fade-in">
+      <div class="project-header">
+        <div>
+          <div class="project-title">대한민국 대통령실 교육관리시스템 납품</div>
+          <div class="project-period">2023.03 ~ 2023.06</div>
+        </div>
+      </div>
+      <p class="project-desc">기존 교육관리시스템을 대통령실 요구사항에 맞게 수정·납품. 담당자 교체로 전면 재시작 요구를 받았으나 PPT 자료로 설득, 기한 내 납품 완료. DB Oracle → MariaDB 마이그레이션.</p>
+      <div class="project-tags">
+        <span class="project-tag">Java</span>
+        <span class="project-tag">Oracle → MariaDB</span>
+        <span class="project-tag">Migration</span>
+      </div>
+    </div>
+
+    <!-- 민방위 -->
+    <div class="project-card fade-in">
+      <div class="project-header">
+        <div>
+          <div class="project-title">국가민방위재난안전교육원 고도화</div>
+          <div class="project-period">2023.02 ~ 2024.03</div>
+        </div>
+      </div>
+      <p class="project-desc">ZOOM · GOOROOMEE API 연동 출석체크, 생활관 신청·예약 관리, 출석정보관리 개발. 협업 코드 충돌 경험 후 팀 내 형상관리 체계와 주기적 소통 구조 직접 제안·정착.</p>
+      <div class="project-tags">
+        <span class="project-tag">Java</span>
+        <span class="project-tag">ZOOM API</span>
+        <span class="project-tag">GOOROOMEE API</span>
+        <span class="project-tag">MariaDB</span>
+      </div>
+      <a href="https://edu.ndti.go.kr/" class="project-link" target="_blank">사이트 보기 →</a>
+    </div>
+
+    <!-- 신용회복위원회 -->
+    <div class="project-card fade-in">
+      <div class="project-header">
+        <div>
+          <div class="project-title">신용회복위원회 유지보수 · 신규 사이트</div>
+          <div class="project-period">2023.10 ~ 2024.12</div>
+        </div>
+      </div>
+      <p class="project-desc">신용교육원 전반적인 유지보수 및 개발 담당. 신용상담사 신규 사이트 개설, 강사 기능 고도화(경력확인서 출력, 강의 배정, 만족도 조사) 개발.</p>
+      <div class="project-tags">
+        <span class="project-tag">Java</span>
+        <span class="project-tag">Oracle</span>
+        <span class="project-tag">Spring Boot</span>
+      </div>
+      <a href="https://www.educredit.or.kr/" class="project-link" target="_blank">사이트 보기 →</a>
+    </div>
+
+    <!-- 블록체인 -->
+    <div class="project-card fade-in">
+      <div class="project-header">
+        <div>
+          <div class="project-title">HeraJ 블록체인 API 개발</div>
+          <div class="project-period">2022.10 ~ 2022.11</div>
+        </div>
+      </div>
+      <p class="project-desc">지갑 생성, 송금, 조회 기능 개발. 다중 송금 시 이슈 발생, 새벽 5시까지 붙잡아 멀티스레드 분기 처리로 해결.</p>
+      <div class="project-highlight">→ 멀티스레드 분기 처리로 다중 송금 이슈 해결</div>
+      <div class="project-tags">
+        <span class="project-tag">Java</span>
+        <span class="project-tag">HeraJ API</span>
+        <span class="project-tag">Blockchain</span>
+        <span class="project-tag">Multi-thread</span>
+      </div>
+    </div>
+
+    <!-- 생명윤리 -->
+    <div class="project-card fade-in">
+      <div class="project-header">
+        <div>
+          <div class="project-title">국가생명윤리정책원 개발·유지보수</div>
+          <div class="project-period">2022.07 ~ 진행중</div>
+        </div>
+      </div>
+      <p class="project-desc">DTC 유전자검사 적합성 신청 기능 및 관리자 심사 기능 구축. 합류 2주 만에 혼자 1달 안에 프로젝트 완성, 야근·주말 출근으로 기한 내 좋은 평가 획득.</p>
+      <div class="project-tags">
+        <span class="project-tag">Java</span>
+        <span class="project-tag">MariaDB</span>
+        <span class="project-tag">Linux</span>
+      </div>
+    </div>
+
+    <!-- 랜덤내기게임 -->
+    <div class="project-card fade-in">
+      <div class="project-header">
+        <div>
+          <div class="project-title">종합게임플랫폼 랜덤내기게임</div>
+          <div class="project-period">2025.12 ~ 2026.01</div>
+        </div>
+      </div>
+      <p class="project-desc">게임사로부터 게임을 공급받아 제공하는 플랫폼 사용자·관리자 개발. 제휴사에 제공하는 공통 JS 개발.</p>
+      <div class="project-tags">
+        <span class="project-tag">Java</span>
+        <span class="project-tag">Spring Boot</span>
+        <span class="project-tag">Thymeleaf</span>
+        <span class="project-tag">GCP</span>
+        <span class="project-tag">MySQL</span>
+      </div>
+    </div>
+
+    <!-- 글로벌클래스 -->
+    <div class="project-card fade-in">
+      <div class="project-header">
+        <div>
+          <div class="project-title">글로벌클래스 솔루션 개발</div>
+          <div class="project-period">2023.06 ~ 진행중</div>
+        </div>
+      </div>
+      <p class="project-desc">다국어 강의를 위한 채팅·번역·실시간 퀴즈 기능 개발. 사용자·관리자 페이지 전반 담당.</p>
+      <div class="project-tags">
+        <span class="project-tag">Java</span>
+        <span class="project-tag">MariaDB</span>
+        <span class="project-tag">번역 API</span>
+      </div>
+      <a href="https://global-class.kr/" class="project-link" target="_blank">사이트 보기 →</a>
+    </div>
+
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact">
+  <div class="contact-box fade-in">
+    <h2 class="contact-title">함께 일해요<span style="color:var(--accent)">.</span></h2>
+    <p class="contact-desc">어떤 기술적 난관 앞에서도 끝까지 해내는 개발자입니다.<br>좋은 기회가 있다면 언제든 연락 주세요.</p>
+    <div class="contact-links">
+      <a href="mailto:le3867@daum.net" class="contact-link">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+        le3867@daum.net
+      </a>
+      <a href="https://github.com/le3867" class="contact-link" target="_blank">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/></svg>
+        GitHub
+      </a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <p>© 2026 이상인 · Backend Developer · Built with passion</p>
+</footer>
+
+<script>
+  // Scroll fade-in
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((entry, i) => {
+      if (entry.isIntersecting) {
+        setTimeout(() => {
+          entry.target.classList.add('visible');
+        }, i * 80);
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.1 });
+
+  document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+
+  // Nav active state
+  const sections = document.querySelectorAll('section[id]');
+  const navLinks = document.querySelectorAll('.nav-links a');
+
+  window.addEventListener('scroll', () => {
+    let current = '';
+    sections.forEach(section => {
+      if (window.scrollY >= section.offsetTop - 100) {
+        current = section.getAttribute('id');
+      }
+    });
+    navLinks.forEach(link => {
+      link.style.color = link.getAttribute('href') === `#${current}`
+        ? 'var(--accent)' : '';
+    });
+  });
+</script>
+
 </body>
-
 </html>
